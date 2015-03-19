@@ -17,8 +17,12 @@ ActiveRecord::Schema.define(:version => 20150319154956) do
     t.string   "patient_uuid"
     t.string   "sample_id"
     t.string   "encounter_uuid"
+    t.string   "patient_name"
+    t.string   "encounter_name"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end
+
+  add_index "patient_samples", ["sample_id"], :name => "index_patient_samples_on_sample_id", :unique => true
 
 end

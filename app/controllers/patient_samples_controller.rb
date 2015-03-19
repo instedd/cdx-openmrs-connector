@@ -44,7 +44,8 @@ class PatientSamplesController < ApplicationController
 
     respond_to do |format|
       if @patient_sample.save
-        format.html { redirect_to @patient_sample, notice: 'Patient sample was successfully created.' }
+        report_patient_sample @patient_sample
+        format.html { redirect_to @patient_sample, notice: 'Sample was successfully registered' }
         format.json { render json: @patient_sample, status: :created, location: @patient_sample }
       else
         format.html { render action: "new" }
@@ -79,5 +80,30 @@ class PatientSamplesController < ApplicationController
       format.html { redirect_to patient_samples_url }
       format.json { head :no_content }
     end
+  end
+
+  SAMPLE_ID_CONCEPT = "f9a40b7e-66c2-45d0-bbea-541e51dc2868"
+
+  def report_patient_sample patient_sample
+    # FIXME extract this to OpenMRSApiController
+
+    uri = URI.parse("http://localhost:8081/openmrs-standalone/ws/rest/v1/obs/")
+
+    req = Net::HTTP::Post.new(uri.request_uri)
+    req.basic_auth 'admin', 'Admin123'
+    req.body = {
+      person: @patient_sample.patient_uuid,
+      obsDatetime: DateTime.now,
+      concept: SAMPLE_ID_CONCEPT,
+      encounter: @patient_sample.encounter_uuid,
+      value: @patient_sample.sample_id
+    }.to_json
+
+    req["Content-Type"] = "application/json"
+
+    res = Net::HTTP.start(uri.hostname, uri.port) {|http|
+      http.request(req)
+    }
+    JSON.parse(res.body)['uuid']
   end
 end

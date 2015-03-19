@@ -1,5 +1,4 @@
 <script type="text/javascript">
-  var patientsUuids = [];
   function searchPatient() {
     var patientName = document.getElementById("patientName").value
 
@@ -12,7 +11,6 @@
     httpRequest.onreadystatechange = function() {
       if (httpRequest.readyState === 4) {
         if (httpRequest.status === 200) {
-          console.log(httpRequest.responseText);
           showPatients(JSON.parse(httpRequest.responseText));
         } else {
           console.log('There was a problem with the request.');
@@ -25,15 +23,57 @@
 
   }
 
-  function selectPatient(event) {
+  function selectEncounter(event) {
     var selection = event.target;
-    
-    document.getElementById("selectedPatientName").textContent = selection.textContent;
-    document.getElementById("patient_sample_patient_uuid").value = patientsUuids[selection.value]
+    var selectedEncounterUuid = selection.getAttribute('data-uuid');
+
+    document.getElementById("patient_sample_encounter_name").value = selection.textContent;
+    document.getElementById("patient_sample_encounter_uuid").value = selectedEncounterUuid;
   }
 
-  function submitSample() {
+  function selectPatient(event) {
+    var selection = event.target;
 
+    var selectedPatientUuid = selection.getAttribute('data-uuid');
+    
+    document.getElementById("patient_sample_patient_name").value = selection.textContent;
+    document.getElementById("patient_sample_patient_uuid").value = selectedPatientUuid;
+
+
+    var httpRequest;
+    if (window.XMLHttpRequest) {
+        httpRequest = new XMLHttpRequest();
+    } else if (window.ActiveXObject) {
+        httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    httpRequest.onreadystatechange = function() {
+      if (httpRequest.readyState === 4) {
+        if (httpRequest.status === 200) {
+          showEncounters(JSON.parse(httpRequest.responseText));
+        } else {
+          console.log('There was a problem with the request.');
+        }
+      }
+    }
+
+    httpRequest.open('GET', '/openmrs/encounters?patient=' + selectedPatientUuid, true);
+    httpRequest.send(null);
+  }
+
+  function showEncounters(response) {
+    var encountersList = document.getElementById('encountersList');
+    while(encountersList.firstChild) {
+      encountersList.removeChild(encountersList.firstChild);
+    }
+
+    for(index in response.results) {
+      var result = response.results[index];
+      var li = document.createElement('li');
+      li.onclick = selectEncounter;
+      li.textContent = result.display;
+      li.setAttribute("data-uuid", result.uuid);
+      encountersList.appendChild(li);
+    }
   }
 
   function showPatients(response) {
@@ -41,15 +81,13 @@
     while(patientsList.firstChild) {
       patientsList.removeChild(patientsList.firstChild);
     }
-    patientsUuids = [];
 
     for(index in response.results) {
       var result = response.results[index];
       var li = document.createElement('li');
       li.onclick = selectPatient;
       li.textContent = result.display;
-      li.value = index;
-      patientsUuids[index] = result.uuid;
+      li.setAttribute("data-uuid", result.uuid);
       patientsList.appendChild(li);
     }
   }
@@ -73,10 +111,16 @@
   <ul id="patientsList">
   </ul>
 
-  Patient: <span id="selectedPatientName"></span> <br />
+  Patient: <%= f.text_field :patient_name, readonly: true %> <br />
   <%= f.hidden_field :patient_uuid %>
+
+  <ul id="encountersList">
+  </ul>
+
+  Encounter: <%= f.text_field :encounter_name, readonly: true %> <br />
+  <%= f.hidden_field :encounter_uuid %>
+
   Sample ID: <%= f.text_field :sample_id %>
-  <input type="submit" onclick="submitSample" value="Register sample" />
 
   <div class="actions">
     <%= f.submit %>

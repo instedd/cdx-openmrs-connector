@@ -1,7 +1,9 @@
 CdpOpenmrsConnector::Application.routes.draw do
   resources :patient_samples
 
-  match 'openmrs/patients' => 'open_mrs_api#search'
+  root :to => 'patient_samples#new'
+  match 'openmrs/patients' => 'open_mrs_api#search_patients'
+  match 'openmrs/encounters' => 'open_mrs_api#search_encounters'
 
 
   # The priority is based upon order of creation:
@@ -50,10 +52,6 @@ CdpOpenmrsConnector::Application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
-  root :to => 'patient_samples#index'
 
   # See how all your routes lay out with "rake routes"
 
