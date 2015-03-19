@@ -1,0 +1,21 @@
+<h1>Patient Samples Register</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @patient_samples.each do |patient_sample| %>
+  <tr>
+    <td><%= link_to 'Show', patient_sample %></td>
+    <td><%= link_to 'Edit', edit_patient_sample_path(patient_sample) %></td>
+    <td><%= link_to 'Destroy', patient_sample, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Patient sample', new_patient_sample_path %>
