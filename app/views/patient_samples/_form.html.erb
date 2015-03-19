@@ -20,7 +20,7 @@
       }
     }
 
-    httpRequest.open('GET', '/patient?name=' + patientName, true);
+    httpRequest.open('GET', '/openmrs/patients?name=' + patientName, true);
     httpRequest.send(null);
 
   }
@@ -29,7 +29,7 @@
     var selection = event.target;
     
     document.getElementById("selectedPatientName").textContent = selection.textContent;
-    document.getElementById("selectedPatientUuid").value = patientsUuids[selection.value]
+    document.getElementById("patient_sample_patient_uuid").value = patientsUuids[selection.value]
   }
 
   function submitSample() {
@@ -58,7 +58,7 @@
 <%= form_for(@patient_sample) do |f| %>
   <% if @patient_sample.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@patient_sample.errors.count, "error") %> prohibited this patient_sample from being saved:</h2>
+      <h2><%= pluralize(@patient_sample.errors.count, "error") %> prohibited this Sample from being registered:</h2>
 
       <ul>
       <% @patient_sample.errors.full_messages.each do |msg| %>
@@ -68,14 +68,14 @@
     </div>
   <% end %>
 
-  Patient sample: <input type="text" id="patientName" /> <input type="button" onclick="javascript:searchPatient();return" value="Search" />
+  Patient name: <input type="text" id="patientName" /> <input type="button" onclick="javascript:searchPatient();return" value="Search" />
 
   <ul id="patientsList">
   </ul>
 
-  Patient: <span id="selectedPatientName"></span>
-  <input type="hidden" id="selectedPatientUuid" /><br />
-  Sample ID: <input type="text" id="sampleID" />
+  Patient: <span id="selectedPatientName"></span> <br />
+  <%= f.hidden_field :patient_uuid %>
+  Sample ID: <%= f.text_field :sample_id %>
   <input type="submit" onclick="submitSample" value="Register sample" />
 
   <div class="actions">

@@ -1,6 +1,8 @@
 CdpOpenmrsConnector::Application.routes.draw do
   resources :patient_samples
 
+  match 'openmrs/patients' => 'open_mrs_api#search'
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
