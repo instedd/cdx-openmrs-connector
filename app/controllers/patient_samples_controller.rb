@@ -87,8 +87,6 @@ class PatientSamplesController < ApplicationController
     end
   end
 
-  SAMPLE_ID_CONCEPT = "f9a40b7e-66c2-45d0-bbea-541e51dc2868"
-
   def report_patient_sample patient_sample
     response = @openmrs_api.report_sample patient_sample
     JSON.parse(response)['uuid']

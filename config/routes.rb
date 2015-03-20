@@ -4,6 +4,7 @@ CdpOpenmrsConnector::Application.routes.draw do
   root :to => 'patient_samples#new'
   match 'openmrs/patients' => 'open_mrs_api#search_patients'
   match 'openmrs/encounters' => 'open_mrs_api#search_encounters'
+  match 'openmrs/result' => 'open_mrs_api#register_result'
 
 
   # The priority is based upon order of creation:
