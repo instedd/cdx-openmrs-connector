@@ -1,1 +1,6 @@
 openmrs_base_url: http://localhost:8081/openmrs-standalone/ws/rest/v1
+
+# search concepts in http://openmrs-host/openmrs-standalone/dictionary/index.htm
+# the UUID is shown in the concept edit page
+sample_id_concept_uuid: f9a40b7e-66c2-45d0-bbea-541e51dc2868
+sample_result_concept_uuid: 80185920-5237-47e0-8c1f-af2ca0179bec
