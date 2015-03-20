@@ -64,7 +64,7 @@ class OpenMrsApi
       obsDatetime: DateTime.now,
       concept: Settings.sample_result_concept_uuid,
       encounter: patient_sample.encounter_uuid,
-      value: result
+      value: "#{patient_sample.sample_id} :: #{result}"
     }.to_json
 
     req["Content-Type"] = "application/json"
