@@ -1,4 +1,9 @@
 class PatientSamplesController < ApplicationController
+
+  def initialize
+    @openmrs_api = OpenMrsApi.new
+  end
+
   # GET /patient_samples
   # GET /patient_samples.json
   def index
@@ -85,25 +90,7 @@ class PatientSamplesController < ApplicationController
   SAMPLE_ID_CONCEPT = "f9a40b7e-66c2-45d0-bbea-541e51dc2868"
 
   def report_patient_sample patient_sample
-    # FIXME extract this to OpenMRSApiController
-
-    uri = URI.parse("http://localhost:8081/openmrs-standalone/ws/rest/v1/obs/")
-
-    req = Net::HTTP::Post.new(uri.request_uri)
-    req.basic_auth 'admin', 'Admin123'
-    req.body = {
-      person: @patient_sample.patient_uuid,
-      obsDatetime: DateTime.now,
-      concept: SAMPLE_ID_CONCEPT,
-      encounter: @patient_sample.encounter_uuid,
-      value: @patient_sample.sample_id
-    }.to_json
-
-    req["Content-Type"] = "application/json"
-
-    res = Net::HTTP.start(uri.hostname, uri.port) {|http|
-      http.request(req)
-    }
-    JSON.parse(res.body)['uuid']
+    response = @openmrs_api.report_sample patient_sample
+    JSON.parse(response)['uuid']
   end
 end
