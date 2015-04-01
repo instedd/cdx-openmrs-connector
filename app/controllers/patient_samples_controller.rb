@@ -1,6 +1,9 @@
 class PatientSamplesController < ApplicationController
 
+  layout 'application'
+
   def initialize
+    super
     @openmrs_api = OpenMrsApi.new
   end
 

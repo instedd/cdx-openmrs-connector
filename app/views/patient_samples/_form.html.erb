@@ -35,7 +35,7 @@
     var selection = event.target;
 
     var selectedPatientUuid = selection.getAttribute('data-uuid');
-    
+
     document.getElementById("patient_sample_patient_name").value = selection.textContent;
     document.getElementById("patient_sample_patient_uuid").value = selectedPatientUuid;
 
@@ -106,23 +106,40 @@
     </div>
   <% end %>
 
-  Patient name: <input type="text" id="patientName" /> <input type="button" onclick="javascript:searchPatient();return" value="Search" />
+  <div class="form-group">
+    <label>Patient name</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="patientName" />
+      <span class="input-group-btn">
+        <input type="button" class="btn btn-default" onclick="javascript:searchPatient();return" value="Search" />
+      </span>
+    </div>
+  </div>
 
   <ul id="patientsList">
   </ul>
 
-  Patient: <%= f.text_field :patient_name, readonly: true %> <br />
-  <%= f.hidden_field :patient_uuid %>
+  <div class="form-group">
+    <label>Patient</label>
+    <%= f.text_field :patient_name, readonly: true, class: 'form-control' %>
+    <%= f.hidden_field :patient_uuid %>
+  </div>
 
   <ul id="encountersList">
   </ul>
 
-  Encounter: <%= f.text_field :encounter_name, readonly: true %> <br />
-  <%= f.hidden_field :encounter_uuid %>
+  <div class="form-group">
+    <label>Encounter</label>
+    <%= f.text_field :encounter_name, readonly: true, class: 'form-control' %>
+    <%= f.hidden_field :encounter_uuid %>
+  </div>
 
-  Sample ID: <%= f.text_field :sample_id %>
+  <div class="form-group">
+    <label>Sample ID</label>
+    <%= f.text_field :sample_id, class: 'form-control' %>
+  </div>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit class: 'btn btn-primary' %>
   </div>
 <% end %>
